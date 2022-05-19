@@ -3,9 +3,23 @@
     "outDir": "dist",
     "rootDir": "src",
     "target": "es2021",
-    "sourceMap": true, 
+    "sourceMap": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,      
-    },
-  "include": ["src"]
+    "forceConsistentCasingInFileNames": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "baseUrl": "src",
+    "paths": {
+      "@/*": [
+        "*"
+      ],
+      "@/tests/*": [
+        "../tests/*"
+      ]
+    }
+  },
+  "include": [
+    "src"
+  ]
 }
