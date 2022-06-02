@@ -11,15 +11,10 @@
     "esModuleInterop": true,
     "baseUrl": "src",
     "paths": {
-      "@/*": [
-        "*"
-      ],
-      "@/tests/*": [
-        "../tests/*"
-      ]
+      "@/*": ["*"],
+      "@/tests/*": ["../tests/*"]
     },
-     "strict": true,  
-
+    "strict": true,
   },
   "include": [
     "src"
