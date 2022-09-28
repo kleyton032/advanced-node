@@ -1,14 +1,14 @@
 import { AutheticationError } from "@/domain/errors";
 import { FacebookAuthetication } from "@/domain/features";
-import { LoadFacebookUserApi } from "../interfaces/apis";
+import { LoadFacebooUserApi } from "../interfaces/apis";
 
 
 export class FacebookAuthenticationService {
 
-    constructor(private readonly LoadFacebookUserApi: LoadFacebookUserApi) { }
+    constructor(private readonly loadFacebookApi: LoadFacebooUserApi) { }
 
-    async perfom(paramns: FacebookAuthetication.Params): Promise<AutheticationError> {
-        await this.LoadFacebookUserApi.loadUserByToken(paramns);
+    async perfom(params: FacebookAuthetication.Params): Promise<AutheticationError> {
+        await this.loadFacebookApi.loadUser(params);
         return new AutheticationError()
     }
 }
