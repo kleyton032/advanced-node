@@ -1,14 +1,14 @@
-import { LoadFacebookUserbyTokenApi } from '@/domain/data/contracts/apis';
+import { LoadFacebookApi } from '@/domain/data/interfaces/apis';
 import { FacebookAuthenticationService } from '@/domain/data/services/facebook-authentication';
 import { AutheticationError } from '@/domain/errors';
 
 
-class LoadFacebookUserbyTokenApiSpy implements LoadFacebookUserbyTokenApi {
+class LoadFacebookUserbyTokenApiSpy implements LoadFacebookApi {
 
     token?: string
     result: undefined
 
-    async loadUserByToken(params: LoadFacebookUserbyTokenApi.Params): Promise<LoadFacebookUserbyTokenApi.Result> {
+    async loadUserByToken(params: LoadFacebookApi.Params): Promise<LoadFacebookApi.Result> {
         this.token = params.token
         return this.result 
     }
