@@ -1,9 +1,9 @@
-export interface LoadFacebookApi {
-    loadUserByToken: (params: LoadFacebookApi.Params) => Promise<LoadFacebookApi.Result>
+export interface LoadFacebookUserApi {
+    loadUserByToken: (params: LoadFacebookUserApi.Params) => Promise<LoadFacebookUserApi.Result>
 }
 
 
-export namespace LoadFacebookApi {
+export namespace LoadFacebookUserApi {
     export type Params = {
         token: string
     }

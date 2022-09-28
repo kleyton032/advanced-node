@@ -1,15 +1,17 @@
-import { LoadFacebookApi } from '@/domain/data/interfaces/apis';
+import { LoadFacebookUserApi } from '@/domain/data/interfaces/apis';
 import { FacebookAuthenticationService } from '@/domain/data/services/facebook-authentication';
 import { AutheticationError } from '@/domain/errors';
 
 
-class LoadFacebookUserbyTokenApiSpy implements LoadFacebookApi {
+class LoadFacebookUserbyTokenApiSpy implements LoadFacebookUserApi {
 
     token?: string
+    callCounts= 0
     result: undefined
 
-    async loadUserByToken(params: LoadFacebookApi.Params): Promise<LoadFacebookApi.Result> {
+    async loadUserByToken(params: LoadFacebookUserApi.Params): Promise<LoadFacebookUserApi.Result> {
         this.token = params.token
+        this.callCounts++
         return this.result 
     }
 }
@@ -22,6 +24,7 @@ describe('FacebookAuthenticationService', () => {
         await sut.perfom({ token: 'any_token' })
 
         expect(loadFacebookuserByTokenApi.token).toBe('any_token')
+        expect(loadFacebookuserByTokenApi.callCounts).toBe(1)
     })
 
     it('should return AuthenticationError when loadFacebookUserApi returns undefined', async () => {
