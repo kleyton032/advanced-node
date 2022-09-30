@@ -1,5 +1,5 @@
 import { LoadFacebooUserApi } from '@/domain/data/interfaces/apis';
-import { LoadUserAccountRepository } from '@/domain/data/interfaces/repos';
+import { CreateFacebookAccountRepository, LoadUserAccountRepository } from '@/domain/data/interfaces/repos';
 import { FacebookAuthenticationService } from '@/domain/data/services/facebook-authentication';
 import { AutheticationError } from '@/domain/errors';
 
@@ -10,6 +10,7 @@ describe('FacebookAuthenticationService', () => {
 
     let loadFacebookUserApi: MockProxy<LoadFacebooUserApi>
     let loadUseraccountRepo: MockProxy<LoadUserAccountRepository>
+    let  createFacebookccountRepo:  MockProxy<CreateFacebookAccountRepository>
     let sut: FacebookAuthenticationService
     const token = 'any_token'
 
@@ -21,9 +22,11 @@ describe('FacebookAuthenticationService', () => {
             facebookId: 'any_fb_id'
         })
         loadUseraccountRepo = mock()
+        createFacebookccountRepo = mock()
         sut = new FacebookAuthenticationService(
             loadFacebookUserApi,
-            loadUseraccountRepo
+            loadUseraccountRepo,
+            createFacebookccountRepo
         )
     })
 
@@ -49,10 +52,23 @@ describe('FacebookAuthenticationService', () => {
 
         await sut.perfom({ token })
 
-        expect(loadUseraccountRepo.load).toHaveBeenLastCalledWith({email: 'any_fb_email'})
+        expect(loadUseraccountRepo.load).toHaveBeenLastCalledWith({ email: 'any_fb_email' })
         expect(loadUseraccountRepo.load).toHaveBeenCalledTimes(1)
 
+    })
 
+
+    it('should call CreateUserAccountRepo when LoadUserAccountRepo returns undefined', async () => {
+
+        loadUseraccountRepo.load.mockRejectedValueOnce(undefined)
+        await sut.perfom({ token })
+
+        expect(createFacebookccountRepo.createFromFacebook).toHaveBeenLastCalledWith({ 
+            email: 'any_fb_email',
+            name: 'any_fb_name',
+            facebookId: 'any_fb_id' 
+        })
+        expect(createFacebookccountRepo.createFromFacebook).toHaveBeenCalledTimes(1)
 
     })
 })
