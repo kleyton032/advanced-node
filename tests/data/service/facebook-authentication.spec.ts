@@ -1,6 +1,6 @@
-import { LoadFacebooUserApi } from '@/domain/data/interfaces/apis';
-import { LoadUserAccountRepository, SaveFacebookAccountRepository } from '@/domain/data/interfaces/repos';
-import { FacebookAuthenticationService } from '@/domain/data/services/facebook-authentication';
+import { LoadFacebooUserApi } from '@/data/interfaces/apis';
+import { LoadUserAccountRepository, SaveFacebookAccountRepository } from '@/data/interfaces/repos';
+import { FacebookAuthenticationService } from '@/data/services/facebook-authentication';
 import { AutheticationError } from '@/domain/errors';
 
 import { mock, MockProxy } from 'jest-mock-extended'
@@ -21,7 +21,7 @@ describe('FacebookAuthenticationService', () => {
             facebookId: 'any_fb_id'
         })
         userAccountRepo = mock()
-        userAccountRepo.load.mockRejectedValue(undefined)
+        userAccountRepo.load.mockResolvedValue(undefined)
         sut = new FacebookAuthenticationService(
             facebookApi,
             userAccountRepo,
@@ -57,7 +57,6 @@ describe('FacebookAuthenticationService', () => {
 
 
     it('should create account with facebook data', async () => {
-
         await sut.perfom({ token })
 
         expect(userAccountRepo.saveWithFacebook).toHaveBeenLastCalledWith({ 
@@ -71,7 +70,7 @@ describe('FacebookAuthenticationService', () => {
 
     it('should not update account name', async () => {
 
-        userAccountRepo.load.mockRejectedValueOnce({
+        userAccountRepo.load.mockResolvedValueOnce({
             id: 'any_id',
             name: 'any_name'
         })
@@ -84,12 +83,11 @@ describe('FacebookAuthenticationService', () => {
             facebookId: 'any_fb_id' 
         })
         expect(userAccountRepo.saveWithFacebook).toHaveBeenCalledTimes(1)
-
     })
 
     it('should update account name', async () => {
 
-        userAccountRepo.load.mockRejectedValueOnce({
+        userAccountRepo.load.mockResolvedValueOnce({
             id: 'any_id'
         })
         await sut.perfom({ token })
@@ -101,7 +99,6 @@ describe('FacebookAuthenticationService', () => {
             facebookId: 'any_fb_id' 
         })
         expect(userAccountRepo.saveWithFacebook).toHaveBeenCalledTimes(1)
-
     })
 })
 
