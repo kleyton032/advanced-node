@@ -1,6 +1,7 @@
 import { FacebookAccount } from "@/domain/models"
 
 describe('FacebookAccount', () => {
+    
     it('should create with facebook data only', () => {
         const sut = new FacebookAccount({
             name: 'any_fb_name',

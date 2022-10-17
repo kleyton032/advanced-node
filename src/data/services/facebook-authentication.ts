@@ -1,6 +1,7 @@
 import { AutheticationError } from "@/domain/errors";
 import { FacebookAuthetication } from "@/domain/features";
 import { LoadFacebooUserApi } from "../interfaces/apis";
+import { TokenGenerator } from '@/data/interfaces/crypto';
 import { SaveFacebookAccountRepository, LoadUserAccountRepository } from '@/data/interfaces/repos';
 import { FacebookAccount } from "@/domain/models";
 
@@ -11,6 +12,7 @@ export class FacebookAuthenticationService {
     constructor(
         private readonly facebookApi: LoadFacebooUserApi,
         private readonly userAccountRepo: LoadUserAccountRepository & SaveFacebookAccountRepository,
+        private readonly crypto: TokenGenerator
 
     ) { }
 
@@ -19,8 +21,8 @@ export class FacebookAuthenticationService {
         if (fbData != undefined) {
             const accountData = await this.userAccountRepo.load({ email: fbData.email })
             const fbAccount = new FacebookAccount(fbData, accountData)
-            await this.userAccountRepo.saveWithFacebook(fbAccount)
-
+            const { id } = await this.userAccountRepo.saveWithFacebook(fbAccount)
+            await this.crypto.generateToken({ key: id })
         }
         return new AutheticationError()
     }
